@@ -1,0 +1,36 @@
+{
+  "name": "reimu.bot",
+  "version": "0.0.1",
+  "description": "Reimu - the discord bot",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bobyclaws/reimu.bot.git"
+  },
+  "keywords": [
+    "Reimu",
+    "Bot",
+    "Discord"
+  ],
+  "author": "Boby",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/bobyclaws/reimu.bot/issues"
+  },
+  "homepage": "https://github.com/bobyclaws/reimu.bot#readme",
+  "dependencies": {
+    "@google-cloud/dialogflow": "^3.3.0",
+    "babel-eslint": "^10.1.0",
+    "cheerio": "^1.0.0-rc.5",
+    "discord.js": "^12.5.1",
+    "form-data": "^3.0.0",
+    "got": "^11.8.1",
+    "yaml": "^1.10.0"
+  },
+  "devDependencies": {
+    "eslint": "^7.16.0"
+  }
+}

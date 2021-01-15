@@ -1,0 +1,4 @@
+node_modules/
+src/config/google/
+src/config/bot-config.yml
+src/bot-config.yml
