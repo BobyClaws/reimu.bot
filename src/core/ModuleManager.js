@@ -2,6 +2,7 @@
 
 const fs = require('fs');
 const RBot = require('./RBot');
+const log = require('../util/log');
 
 class ModuleManager {
 
@@ -10,7 +11,7 @@ class ModuleManager {
      * @param {RBot} rbot 
      */
     constructor(rbot) {
-       this.rbot = rbot; 
+        this.rbot = rbot; 
     
     }
 
@@ -19,13 +20,13 @@ class ModuleManager {
         const moduleFiles = fs.readdirSync("modules")
             .filter((file) => file.endsWith(".js"));
         
-        console.log("found modules: " + moduleFiles);
+        log("found modules: ", moduleFiles);
 
         for (const file of moduleFiles) {
-            console.log("loading module: " + file);
+            log("loading module: " + file);
             let moduleClass = require(`../modules/${file}`);
             let module = new moduleClass(this.rbot);
-            console.log('Done.');
+            log("Done.");
             this.rbot.modules.push(module);
         }
 
@@ -34,30 +35,31 @@ class ModuleManager {
 
     setupModules() {
 
-        // pass command requests from raw messages
-        this.rbot.DClient.on("message", (msg)  => {
+        // setup raw message processing.
+        this.rbot.dClient.on("message", (msg)  => {
 
             // look for commands in message
             if(msg.author.bot == true) return;
             if(msg.content.startsWith("r.")) {
-                
+
                 let args = msg.content.trim().slice(2).split(/ +/);
-            
                 let commandName = args.shift();
                 // give message to all modules with function processCommand
                 for(let module of this.rbot.modules) {
                     if(module.commandName == commandName) {
-                        if(module.processCommand == undefined) {
-                            continue;
-                        }
                         module.processCommand(msg, args);
                     }
                 }
+            } else {
+                for(let module of this.rbot.modules) {
+                    module.processMessage(msg);
+                }
             }
+
         });
 
         // TODO: pass commands requests from slash commands
-        this.rbot.DClient.ws.on('INTERACTION_CREATE', async interaction => {
+        this.rbot.dClient.ws.on('INTERACTION_CREATE', async interaction => {
             for(let module of this.rbot.modules) {
                 if(module.commandName == interaction.data.name) {
                     module.processInteraction(interaction);

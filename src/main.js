@@ -1,7 +1,7 @@
 const RBot = require("./core/RBot");
 
 let bot = new RBot();
-bot.configure("./bot-config.yml");
+bot.configure("./config/bot-config.yml");
 bot.start();
 
 // TODO:

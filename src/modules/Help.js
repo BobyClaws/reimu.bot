@@ -26,6 +26,10 @@ class Help extends Module {
         embed.addField('say', 'make me speak stuff');
         msg.channel.send(embed);
     }
+
+    processInteraction() {}
+
+    processMessage() {}
 }
 
 module.exports = Help;

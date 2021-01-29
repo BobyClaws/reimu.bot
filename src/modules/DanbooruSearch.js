@@ -1,6 +1,8 @@
 const got = require("got");
 const FormData = require("form-data");
 const cheerio = require("cheerio");
+const log = require("../util/log");
+
 
 class DanboourSearch {
 
@@ -23,7 +25,7 @@ class DanboourSearch {
 
                 for(let maybeURL of arr) {
                     if(maybeURL.startsWith("http")) {
-                        console.log("found: " + maybeURL);
+                        log("found: " + maybeURL);
                         url = maybeURL;
                         break;
                     
@@ -36,14 +38,14 @@ class DanboourSearch {
                         url = message.attachments.first().attachment;
                     }
                 } catch(e) {
-                    console.log(e);
+                    log(e);
                 } finally {
                     let x = 0;
                 }
 
 
             
-                console.log("here url is: " + url);
+                log("here url is: " + url);
             } else {
                 url = args[0];
             }
@@ -62,7 +64,7 @@ class DanboourSearch {
                     
                     let $ = cheerio.load(res.body);
                     let resultsPage = "https:" + $("a", "#pages")[0].attribs.href;
-                    console.log(resultsPage);
+                    log(resultsPage);
 
                 
                     res = await got.get(resultsPage);
@@ -73,7 +75,7 @@ class DanboourSearch {
                     msg.channel.send("source: " + result);
                 
                 } catch(e) {
-                    console.log(e);
+                    log(e);
                     msg.channel.send("[x] possibly couldn't find image");
                 } finally {
                     let x = 1;
@@ -82,17 +84,17 @@ class DanboourSearch {
             })();
 
         } catch(e) {
-            console.log(e);
-            console.log("[!] unknown error occured");
+            log(e);
+            log("[!] unknown error occured");
         } finally {
             let x = 1;
         }
 
     }
 
-    processInteraction(interaction) {
-        
-    }
+    processInteraction() {}
+
+    processMessage() {}
 }
 
 module.exports = DanboourSearch;

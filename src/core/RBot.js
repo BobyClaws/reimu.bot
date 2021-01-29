@@ -1,16 +1,19 @@
 const fs = require("fs");
 const Discord = require("discord.js");
 const confLoader = require("../util/confLoader");
-const ModuleManager = require('./ModuleManager');
+const ModuleManager = require("./ModuleManager");
+const ServiceManager = require("./ServiceManager");
+const log = require("../util/log");
 
 class RBot {
 
     constructor() {
         
-        this.DClient = new Discord.Client();
+        this.dClient = new Discord.Client();
         this.modules = [];
         this.services = [];
         this.moduleManager = new ModuleManager(this);
+        this.serviceManager = new ServiceManager(this);
     }
 
     /**
@@ -28,13 +31,13 @@ class RBot {
         const serviceFiles = fs.readdirSync("services")
             .filter((file) => file.endsWith(".js"));
         
-        console.log("found services: " + serviceFiles);
+        log("found services: " + serviceFiles);
 
         for (const file of serviceFiles) {
-            console.log("loading service: " + file);
+            log("loading service: " + file);
             let serviceClass = require(`../services/${file}`);
             let service = new serviceClass();
-            console.log('Done.');
+            log("Done.");
             this.services.push(service);
             
         }
@@ -46,7 +49,8 @@ class RBot {
 
     start() {
         this.moduleManager.start();
-        this.DClient.login(this.botConfig.botToken);
+        this.serviceManager.start();
+        this.dClient.login(this.botConfig.botToken);
     }
 }
 

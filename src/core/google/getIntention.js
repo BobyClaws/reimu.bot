@@ -1,49 +1,40 @@
 // Imports the Dialogflow library
-const dialogflow = require('@google-cloud/dialogflow');
+const dialogflow = require("@google-cloud/dialogflow");
+const log = require("../../util/log");
 
+// Instantiates a session client
+const sessionClient = new dialogflow.SessionsClient();
 
 module.exports = async function getIntention(message) {
+    return executeQueries(message);
+};
 
-    // Instantiates a session client
-    const sessionClient = new dialogflow.SessionsClient();
-    return executeQueries("hakerui-reimu", "123456789", message, "en");
-
-}
-
-async function executeQueries(projectId, sessionId, query, languageCode) {
+async function executeQueries(query) {
+    
     // Keeping the context across queries let's us simulate an ongoing conversation with the bot
-    let context;
     let intentResponse;
     try {
-        console.log(`Sending Query: ${query}`);
-        intentResponse = await detectIntent(
-        projectId,
-        sessionId,
-        query,
-        context,
-        languageCode
-        );
-        console.log('Detected intent');
+        log(`Sending Query: ${query}`);
+        intentResponse = await detectIntent(query);
+
+        log("Detected intent");
         return intentResponse;
         // Use the context from this response for next queries
-        context = intentResponse.queryResult.outputContexts;
+        //context = intentResponse.queryResult.outputContexts;
     } catch (error) {
-        console.log(error);
+        log(error);
     }
 }
 
-async function detectIntent(
-        projectId,
-        sessionId,
-        query,
-        contexts,
-        languageCode) {
-            
+async function detectIntent(query) {
+      
+    let contexts = null;
     // The path to identify the agent that owns the created intent.
     const sessionPath = sessionClient.projectAgentSessionPath(
-        projectId,
-        sessionId
+        "hakerui-reimu", // projectId
+        "123456789", // sessionId
     );
+
 
     // The text query request.
     const request = {
@@ -51,17 +42,19 @@ async function detectIntent(
         queryInput: {
             text: {
                 text: query,
-                languageCode: languageCode,
+                languageCode: "en"
             },
         },
     };
 
+    // append contexts if available
     if (contexts && contexts.length > 0) {
         request.queryParams = {
-        contexts: contexts,
+            contexts: contexts,
         };
     }
 
     const responses = await sessionClient.detectIntent(request);
     return responses[0];
+
 }
