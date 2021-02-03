@@ -1,7 +1,7 @@
 // TODO: command processor would be good?
-const log = require('../util/log');
-const fs = require('fs');
-const RBot = require('./RBot');
+const log = require("../util/log");
+const fs = require("fs");
+const RBot = require("./RBot");
 
 class ServiceManager {
 
@@ -26,8 +26,8 @@ class ServiceManager {
             .filter((file) => file.endsWith(".js"));
         // look for services as folders
         let moreServiceFiles = fs.readdirSync("services", { withFileTypes: true })
-        .filter(dir => dir.isDirectory())
-        .map(dir => dir.name + '/' + dir.name + '.js');
+            .filter(dir => dir.isDirectory())
+            .map(dir => dir.name + "/" + dir.name + ".js");
 
         serviceFiles = serviceFiles.concat(moreServiceFiles);
 
@@ -37,7 +37,7 @@ class ServiceManager {
             log("loading service: " + file);
             let serviceClass = require(`../services/${file}`);
             let service = new serviceClass(this.rbot);
-            log('Done.');
+            log("Done.");
             this.rbot.services.push(service);
         }
 
@@ -45,10 +45,10 @@ class ServiceManager {
 
 
     setupServices() {
-        log('setting up services');
+        log("setting up services");
         for(let service of this.rbot.services) {
             service.init();
-            setInterval(service.loop, service.serviceInterval);
+            setInterval(service.loop.bind(service), service.serviceInterval);
             
         }
     }

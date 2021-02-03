@@ -15,11 +15,11 @@ class Service {
     }
 
     init() {
-        log("service not initialized");
+        // this.log("service not initialized");
     }
 
     loop() {
-        log("no loop defined.. guess im looping for no reason");
+        // this.log("no loop defined.. guess im looping for no reason");
     }
 
     log(...msg) {

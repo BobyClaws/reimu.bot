@@ -1,0 +1,13 @@
+name: "achievement name"
+description: "achievement description"
+count: 100 
+time_frame: 3600
+
+user:
+  with_roles: # applies to users with following roles
+    - "beginner"
+    - "veteran"
+  in_channels: # applies in following channels
+    - "$any"
+  sends_message:        
+    wtih_text: "foo"

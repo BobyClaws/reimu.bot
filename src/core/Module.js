@@ -8,15 +8,15 @@ class Module {
     }
 
     processInteraction() {
-        this.log("method processInteraction() not implemented, skipping");
+        // this.log("method processInteraction() not implemented, skipping");
     }
 
     processCommand() {
-        this.log("method processCommand() not implemented, skipping");
+        // this.log("method processCommand() not implemented, skipping");
     }
 
     processMessage() {
-        this.log("method processMessage() not implemented, skipping");
+        // this.log("method processMessage() not implemented, skipping");
     }
 
     log(...msg) {

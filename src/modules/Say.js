@@ -31,7 +31,6 @@ class Say extends Module {
     processInteraction(interaction) {
 
         let channel = this.rbot.dClient.channels.cache.get(interaction.channel_id);
-        console.log(interaction);
         channel.send(interaction.data.options[0].value);
     }
 

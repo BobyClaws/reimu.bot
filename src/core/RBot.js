@@ -8,7 +8,8 @@ const log = require("../util/log");
 class RBot {
 
     constructor() {
-        
+
+        this.botConfig = {};
         this.dClient = new Discord.Client();
         this.modules = [];
         this.services = [];
@@ -25,31 +26,16 @@ class RBot {
     }
 
 
-
-    // TODO: add this to service manager
-    loadServices() {
-        const serviceFiles = fs.readdirSync("services")
-            .filter((file) => file.endsWith(".js"));
-        
-        log("found services: " + serviceFiles);
-
-        for (const file of serviceFiles) {
-            log("loading service: " + file);
-            let serviceClass = require(`../services/${file}`);
-            let service = new serviceClass();
-            log("Done.");
-            this.services.push(service);
-            
-        }
-
-    }
-
-
-
-
     start() {
-        this.moduleManager.start();
-        this.serviceManager.start();
+        this.dClient.on("ready", () => {
+        // Set the client user's activity
+            this.dClient.user.setActivity("*help", { type: "LISTENING" })
+                .then(presence => log(`Activity set to ${presence.activities[0].name}`))
+                .catch(console.error);
+            this.moduleManager.start();
+            this.serviceManager.start();
+        });
+        
         this.dClient.login(this.botConfig.botToken);
     }
 }

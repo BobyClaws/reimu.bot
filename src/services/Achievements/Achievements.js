@@ -1,5 +1,4 @@
 const Service = require("../../core/Service");
-const log = require("../../util/log");
 const fs = require("fs");
 const confLoader = require("../../util/confLoader");
 
@@ -10,16 +9,22 @@ class Achievements extends Service {
         this.serviceName = "Achievements";
         this.serviceInterval = 10000;
         this.achievements = [];
+        this.queues = {
+            messages: []
+        };
     }
 
     init() {
 
         this.loadAchievements();
 
-        // setup message processing
+        // setup message event processing
         this.rbot.dClient.on("message", () => {
-
+            // throw message in processing queue
         });
+        this.loop();
+
+        // setup other event processing
     }
 
     loadAchievements() {
@@ -36,7 +41,12 @@ class Achievements extends Service {
     }
 
     loop() {
-        
+
+        // for(let achievement of this.achievements) {
+        //     this.log("processing achievement: ", achievement.name);
+            
+        // }
+
     }
 
 

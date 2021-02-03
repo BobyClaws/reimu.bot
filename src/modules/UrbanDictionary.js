@@ -21,8 +21,6 @@ class UrbanDictionary extends Module {
             let query = msg.content;
             
             if(!query.includes("reimu")) return;
-
-
             if(query.startsWith("reimu")) {
 
 
@@ -42,7 +40,7 @@ class UrbanDictionary extends Module {
             let resolvedIntent = res.queryResult.intent.displayName;
             console.log(resolvedIntent);
 
-            if(resolvedIntent == "asks a meaning") {
+            if(resolvedIntent == "asks meaning") {
                 
                 let targetWord = null;
 
@@ -56,12 +54,12 @@ class UrbanDictionary extends Module {
                 let definition = null;
 
                 try {
-                    let {res_json} = await got.get("http://api.urbandictionary.com/v0/define?term=" + targetWord);
-                    res_json = JSON.parse(res_json);
-                    definition = res_json.list[0].definition;
+                    let {body} = await got.get("http://api.urbandictionary.com/v0/define?term=" + targetWord);
+                    let res = JSON.parse(body);
+                    definition = res.list[0].definition;
 
                 } catch(e) {
-                    definition = "couldn't find a definition";
+                    definition = "couldn't find a definition for: " + targetWord;
 
                 } finally {
                     msg.channel.send(definition);
@@ -77,20 +75,8 @@ class UrbanDictionary extends Module {
             
     }
 
-    processInteraction() {}
-
-    processCommand() {}
 
 
 }
 
 module.exports = UrbanDictionary;
-
-
-
-
-
-
-
-
-

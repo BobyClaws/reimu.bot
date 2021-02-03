@@ -6,6 +6,8 @@ extends: 'eslint:recommended'
 parser: babel-eslint
 parserOptions:
   ecmaVersion: 12
+plugins:
+  - jsdoc
 rules:
   indent:
     - warn
@@ -21,3 +23,6 @@ rules:
     - always
   no-unused-vars:
     - warn
+    
+  # jsdoc rules here
+  jsdoc/no-undefined-types: 1

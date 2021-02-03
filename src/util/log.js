@@ -3,11 +3,11 @@ function  log(...msg) {
         .toLocaleTimeString("en-US")
         .split(/:| /);
     
-    msg = msg.reduce((prev, cur) => {
-        return prev + " " + cur;
-    });
+    // msg = msg.reduce((prev, cur) => {
+    //     return prev + " " + cur;
+    // });
 
-    console.log(`[${hour}:${minute}:${second}] ${msg}`);
+    console.log(`[${hour}:${minute}:${second}] `, ...msg);
     
     
 

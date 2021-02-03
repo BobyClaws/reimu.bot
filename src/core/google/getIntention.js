@@ -3,7 +3,10 @@ const dialogflow = require("@google-cloud/dialogflow");
 const log = require("../../util/log");
 
 // Instantiates a session client
-const sessionClient = new dialogflow.SessionsClient();
+const sessionClient = new dialogflow.SessionsClient({
+    projectId: "hakerui-reimu",
+    keyFilename: "./config/google/primary-service-account.json"
+});
 
 module.exports = async function getIntention(message) {
     return executeQueries(message);

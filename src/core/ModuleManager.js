@@ -1,15 +1,11 @@
 // TODO: command processor would be good?
 
-const fs = require('fs');
-const RBot = require('./RBot');
-const log = require('../util/log');
+const fs = require("fs");
+const log = require("../util/log");
 
 class ModuleManager {
 
-    /**
-     * 
-     * @param {RBot} rbot 
-     */
+
     constructor(rbot) {
         this.rbot = rbot; 
     
@@ -40,9 +36,9 @@ class ModuleManager {
 
             // look for commands in message
             if(msg.author.bot == true) return;
-            if(msg.content.startsWith("r.")) {
+            if(msg.content.startsWith("*")) {
 
-                let args = msg.content.trim().slice(2).split(/ +/);
+                let args = msg.content.trim().slice(1).split(/ +/);
                 let commandName = args.shift();
                 // give message to all modules with function processCommand
                 for(let module of this.rbot.modules) {
@@ -59,7 +55,7 @@ class ModuleManager {
         });
 
         // TODO: pass commands requests from slash commands
-        this.rbot.dClient.ws.on('INTERACTION_CREATE', async interaction => {
+        this.rbot.dClient.ws.on("INTERACTION_CREATE", async interaction => {
             for(let module of this.rbot.modules) {
                 if(module.commandName == interaction.data.name) {
                     module.processInteraction(interaction);
