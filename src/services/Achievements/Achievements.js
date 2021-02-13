@@ -1,13 +1,14 @@
 const Service = require("../../core/Service");
 const fs = require("fs");
 const confLoader = require("../../util/confLoader");
+const user = require("./satifactions/try");
 
 class Achievements extends Service {
 
     constructor(rbot) {
         super(rbot);
         this.serviceName = "Achievements";
-        this.serviceInterval = 10000;
+        this.serviceInterval = 1000;
         this.achievements = [];
         this.queues = {
             messages: []
@@ -18,13 +19,37 @@ class Achievements extends Service {
 
         this.loadAchievements();
 
+        // load modules (user.message etc.,)
+
         // setup message event processing
-        this.rbot.dClient.on("message", () => {
-            // throw message in processing queue
+        this.rbot.dClient.on("message", (msg) => {
+            /* throw message in processing queue */
+            
+            this.log(msg.channel.name);
+
+            if(msg.channel.name == "hakerui-shrine") {
+                // generate expiry date
+                let expiry = new Date();
+                expiry.setMinutes(expiry.getMinutes() + 1);
+                
+                this.queues.messages.push({
+                    "id": msg.id,
+                    "msg": msg,
+                    "expiry": expiry,
+                    "achievements": []
+                });
+            }
+
+
+
         });
+
+
+        // setup other event processing here
+
+        // start service loop
         this.loop();
 
-        // setup other event processing
     }
 
     loadAchievements() {
@@ -42,10 +67,26 @@ class Achievements extends Service {
 
     loop() {
 
-        // for(let achievement of this.achievements) {
-        //     this.log("processing achievement: ", achievement.name);
+        this.log("queue length:", this.queues.messages.length);
+        if(this.queues.messages.length == 0) return;
+        
+
+        for(let achievement of this.achievements) {
+            this.log("processing achievement: ", achievement.name);
+            user(this.rbot, achievement.name, this.queues, achievement.user);
             
-        // }
+               
+            
+        }
+
+        /*/ flush message queue after expiry (1hr for now)
+        while(this.queues.messages[0] && this.queues.messages[0].expiry < new Date()) {
+            this.log("flushing message due to expiry:", this.queues.messages[0].id);
+            this.queues.messages.shift();
+            this.log("done, reamaining messages left:", this.queues.messages.length);
+            
+        } */
+
 
     }
 
