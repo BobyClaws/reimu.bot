@@ -1,7 +1,13 @@
+const RBot = require("./RBot");
+
 const log = require("../util/log");
 
 class Module {
 
+    /**
+     * 
+     * @param {RBot} rbot 
+     */
     constructor(rbot) {
         this.rbot = rbot;
         this.moduleName = null;

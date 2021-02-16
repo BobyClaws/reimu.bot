@@ -1,7 +1,7 @@
 const Service = require("../../core/Service");
 const fs = require("fs");
 const confLoader = require("../../util/confLoader");
-const user = require("./satifactions/try");
+const user = require("./fulfillments/try");
 
 class Achievements extends Service {
 
@@ -13,13 +13,19 @@ class Achievements extends Service {
         this.queues = {
             messages: []
         };
+
+        // load from the file 
+        // if newly created achievement doesnt exists create an entry for it
+        this.records = {};
+
+        
     }
 
     init() {
 
         this.loadAchievements();
-
         // load modules (user.message etc.,)
+
 
         // setup message event processing
         this.rbot.dClient.on("message", (msg) => {
@@ -39,13 +45,13 @@ class Achievements extends Service {
                     "achievements": []
                 });
             }
-
-
-
         });
 
-
         // setup other event processing here
+
+        // load achievement records. TODO: implement database asap to possibly replace this
+        let recordFile = "../data/Achievements/records/records.yml";
+        this.records = confLoader.load(recordFile);
 
         // start service loop
         this.loop();
@@ -53,39 +59,41 @@ class Achievements extends Service {
     }
 
     loadAchievements() {
-        const achievementFiles = fs.readdirSync("services/Achievements/achievements")
+        const achievementFiles = fs.readdirSync("../data/Achievements/achievements")
             .filter((file) => file.endsWith(".yml"));
         
         // this.log("found achievements: ", achievementFiles);
         this.log("found achievements:", `[${achievementFiles}]`);
 
         for (const file of achievementFiles) {
-            let achievement = confLoader.load(`services/Achievements/achievements/${file}`);
+            let achievement = confLoader.load(`../data/Achievements/achievements/${file}`);
             this.achievements.push(achievement);
         }
     }
 
     loop() {
 
-        this.log("queue length:", this.queues.messages.length);
+
+        this.log("current messages in queue:", this.queues.messages.length);
         if(this.queues.messages.length == 0) return;
         
 
         for(let achievement of this.achievements) {
-            this.log("processing achievement: ", achievement.name);
-            user(this.rbot, achievement.name, this.queues, achievement.user);
-            
-               
-            
+            this.log("... ");
+            user(this, achievement, this.queues, achievement.user);
         }
 
-        /*/ flush message queue after expiry (1hr for now)
+        // flush message queue after expiry (1hr for now)
         while(this.queues.messages[0] && this.queues.messages[0].expiry < new Date()) {
             this.log("flushing message due to expiry:", this.queues.messages[0].id);
             this.queues.messages.shift();
             this.log("done, reamaining messages left:", this.queues.messages.length);
             
-        } */
+        }
+
+        // persist records
+        let recordFile = "../data/Achievements/records/records.yml";
+        confLoader.save(recordFile, this.records);
 
 
     }
