@@ -31,20 +31,20 @@ class Achievements extends Service {
         this.rbot.dClient.on("message", (msg) => {
             /* throw message in processing queue */
             
-            this.log(msg.channel.name);
+            
 
-            if(msg.channel.name == "hakerui-shrine") {
-                // generate expiry date
-                let expiry = new Date();
-                expiry.setMinutes(expiry.getMinutes() + 1);
-                
-                this.queues.messages.push({
-                    "id": msg.id,
-                    "msg": msg,
-                    "expiry": expiry,
-                    "achievements": []
-                });
-            }
+       
+            // generate expiry date
+            let expiry = new Date();
+            expiry.setMinutes(expiry.getMinutes() + 1);
+            
+            this.queues.messages.push({
+                "id": msg.id,
+                "msg": msg,
+                "expiry": expiry,
+                "achievements": []
+            });
+            
         });
 
         // setup other event processing here
