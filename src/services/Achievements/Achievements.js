@@ -8,7 +8,7 @@ class Achievements extends Service {
     constructor(rbot) {
         super(rbot);
         this.serviceName = "Achievements";
-        this.serviceInterval = 1000;
+        this.serviceInterval = 10000;
         this.achievements = [];
         this.queues = {
             messages: []
@@ -79,7 +79,6 @@ class Achievements extends Service {
         
 
         for(let achievement of this.achievements) {
-            this.log("... ");
             user(this, achievement, this.queues, achievement.user);
         }
 
