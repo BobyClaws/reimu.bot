@@ -1,6 +1,12 @@
 const Discord = require("discord.js");
+const Service = require("../../../core/Service");
 
-
+/**
+ * 
+ * @param {Service} svc 
+ * @param {*} achievement 
+ * @param {*} queues 
+ */
 function user(svc, achievement, queues) {
 
     let achvName = achievement.name;
@@ -31,7 +37,7 @@ function user(svc, achievement, queues) {
 
         if(satisfaction) {
 
-            let shrine = svc.rbot.dClient.channels.cache.find(c => c.id == "794137845182365716");
+            let shrine = svc.rbot.dClient.channels.cache.find(c => c.id == "744622961599840317");
 
             // add achivement to records if doesnt exist.
             if(!svc.records[achvName])
@@ -49,7 +55,7 @@ function user(svc, achievement, queues) {
             if(svc.records[achvName]["achievers"][user.username] < achievement.count)
                 svc.records[achvName]["achievers"][user.username]++;
 
-            else if(svc.records[achvName]["achievers"][user.username] == achievement.count){
+            if(svc.records[achvName]["achievers"][user.username] == achievement.count) {
                 let embed = new Discord.MessageEmbed();
                 let name = `${achvName}  [${svc.records[achvName]["achievers"][user.username]}/${achievement.count}]`;
     
@@ -58,7 +64,8 @@ function user(svc, achievement, queues) {
                 embed.setThumbnail("https://upload.wikimedia.org/wikipedia/commons/thumb/9/99/Star_icon_stylized.svg/10____px-Star_icon_stylized.svg.png");
                 embed.setFooter(user.username, user.avatarURL());
                 embed.setColor("FF9952");
-                shrine.send(embed);
+                shrine.send(`<@${user.id}>`, {embed: embed});
+
                 // so that it doesnt trigger everytime
                 // TODO: improve this so it skips all the satisfaction completely if its already done.
                 svc.records[achvName]["achievers"][user.username]++;
