@@ -57,10 +57,10 @@ function user(svc, achievement, queues) {
                 let embed = new Discord.MessageEmbed();
                 let name = `${achvName}  [${svc.records[achvName]["achievers"][user.username]}/${achievement.count}]`;
     
-                embed.setTitle("Achievement Unlocked!");
+                embed.setAuthor(`${user.username}`, user.avatarURL());
                 embed.addField(name, achievement.description);
                 embed.setThumbnail("https://upload.wikimedia.org/wikipedia/commons/thumb/9/99/Star_icon_stylized.svg/10____px-Star_icon_stylized.svg.png");
-                embed.setFooter(user.username, user.avatarURL());
+                embed.setFooter("Achievement Unlocked!");
                 embed.setColor("FF9952");
                 shrine.send(`<@${user.id}>`, {embed: embed});
 
