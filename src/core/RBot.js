@@ -28,10 +28,12 @@ class RBot {
 
     start() {
         this.dClient.on("ready", () => {
-        // Set the client user's activity
+            
+            // Set the client user's activity
             this.dClient.user.setActivity("*help", { type: "LISTENING" })
                 .then(presence => log(`Activity set to ${presence.activities[0].name}`))
                 .catch(console.error);
+
             this.moduleManager.start();
             this.serviceManager.start();
         });
