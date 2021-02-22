@@ -22,9 +22,7 @@ function user(svc, achievement, queues) {
         // TODO: remove duplicates
         if(!users.includes(message.msg.author))
             users.push(message.msg.author);
-        else {
-            svc.log("not pushing user already in queue");
-        }
+        
     }
 
     for(let user of users) {
