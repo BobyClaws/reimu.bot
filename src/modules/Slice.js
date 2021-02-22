@@ -37,7 +37,7 @@ class Slice extends Module {
         this.log("got url:", url);
         fs.writeFileSync("../external/Achievements/source/source_url.txt", url);
 
-        exec("./all/process.sh",
+        exec("../external/Achievements/process.sh",
             {shell: "/bin/bash"},
             (err, stdout, stderr) => {
                 if (err) console.error(err);
