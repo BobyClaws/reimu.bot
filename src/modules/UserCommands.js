@@ -20,7 +20,7 @@ class UserCommands extends Module {
     
     processCommand(msg, args) {
         this.msg = msg;
-        if(args > 2) return;
+        // if(args > 2) return;
         if(args[0] == "add") this.addUserCommand(args);
         if(args[0] == "remove") this.removeUserCommand(args);
         if(args[0] == "list") this.listUserCommands();
@@ -42,8 +42,14 @@ class UserCommands extends Module {
         console.log("user command added");
         let commands = confLoader.load("../data/commands.yml");
 
-        commands[args[1]] = args[2];
-        console.log(args[1] + " " + args[2]);
+        let value = "";
+        for(let i = 2; i < args.length; i++) {
+            value += args[i] + " ";
+        }
+        value = value.trim();
+
+        commands[args[1]] = value;
+        console.log(args[1] + " " + value);
         confLoader.save("../data/commands.yml", commands);
     }
 
